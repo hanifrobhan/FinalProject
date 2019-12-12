@@ -588,4 +588,305 @@ void print_sebagian (data *barang,int j)
 	printf("\nNomor Rak 		: %i", barang[j].no_rak);
 	printf("\nJumlah Barang		: %d %s\n", barang[j].jumlah_barang, barang[j].satuan);		
 }
+int tambah_array(data **array, int size)
+{
+    size++;
+    data *temp = (data *) realloc(*array, (size * sizeof(data)));
+    if(temp == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }
+    else
+        *array = temp;    
+    return size;
+}
 
+int kurangi_array(data **array, int size)
+{
+    size--;
+    data *temp = (data *) realloc(*array, (size * sizeof(data)));
+    if(temp == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }
+    else
+        *array = temp;    
+    return size;
+}
+
+int mencari_ID(data *barang,int cari,int awal, int akhir, int s) //binary search
+{
+	int tengah=(awal+akhir)/2;
+	if(s<0)
+	{
+		printf("Barang tidak ditemukan");
+		return -1;
+	}
+	if (cari==barang[tengah].ID_barang)
+	{
+		printf("Barang ditemukan !\nDetail :\n");
+		print_sebagian (barang,tengah);
+		return tengah;
+	}
+	else if(cari<barang[tengah].ID_barang)
+	{
+		s--;
+		return mencari_ID(barang, cari, awal, tengah-1, s);
+	}
+	else 
+	{
+		s--;
+		return mencari_ID(barang, cari, tengah+1, akhir, s);
+	}
+}
+
+int mencari_Nama(data *barang,char cari[35],int awal, int akhir, int s) //binary search
+{	
+	int tengah=(awal+akhir)/2;
+	if(s<0)
+	{
+		printf("Barang tidak ditemukan");
+		return 0;
+	}
+	if (strcmp(cari,barang[tengah].nama_barang)==0)
+	{
+		printf("Barang ditemukan !\nDetail :\n");
+		print_sebagian (barang,tengah);
+		return 0;
+	}
+	else if(strcmp(cari,barang[tengah].nama_barang)<0)
+	{
+		s--;
+		return mencari_Nama(barang, cari, awal, tengah-1, s);
+	}
+	else 
+	{
+		s--;
+		return mencari_Nama(barang, cari, tengah+1, akhir, s);
+	}
+}
+
+void urutkan_ID(data *barang, int n) //insertion sort
+{
+	data *sementara = (data *)malloc(sizeof(data));
+    if(sementara == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }	
+	int posisi;
+	for(int i=1;i<n;i++){
+		*sementara=barang[i];
+		posisi=i;
+		while(posisi>0 && barang[posisi-1].ID_barang>sementara->ID_barang){
+			barang[posisi]=barang[posisi-1];
+			posisi=posisi-1;
+		}
+		barang[posisi]=*sementara;
+	}
+	free(sementara);
+	print_semua (barang,n);		
+}
+
+void urutkan_Nama(data *barang, int n) //insertion sort
+{
+	data *sementara = (data *)malloc(sizeof(data));
+    if(sementara == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }	
+	int posisi;
+	for(int i=1;i<n;i++){
+		*sementara=barang[i];
+		posisi=i;
+		while(posisi>0 && strcmp(barang[posisi-1].nama_barang,sementara->nama_barang)>0){
+			barang[posisi]=barang[posisi-1];
+			posisi=posisi-1;
+		}
+		barang[posisi]=*sementara;
+	}
+	free(sementara);
+	print_semua (barang,n);		
+}
+
+void urutkan_Kategori_Barang(data *barang, int n) //insertion sort
+{
+	data *sementara = (data *)malloc(sizeof(data));
+    if(sementara == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }	
+	int posisi;
+	for(int i=1;i<n;i++){
+		*sementara=barang[i];
+		posisi=i;
+		while(posisi>0 && strcmp(barang[posisi-1].kategori_barang,sementara->kategori_barang)>0){
+			barang[posisi]=barang[posisi-1];
+			posisi=posisi-1;
+		}
+		barang[posisi]=*sementara;
+	}
+	free(sementara);
+	print_semua (barang,n);		
+}
+
+void urutkan_Harga(data *barang, int n) //insertion sort
+{
+	data *sementara = (data *)malloc(sizeof(data));
+    if(sementara == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }	
+	int posisi;
+	for(int i=1;i<n;i++){
+		*sementara=barang[i];
+		posisi=i;
+		while(posisi>0 && barang[posisi-1].harga>sementara->harga){
+			barang[posisi]=barang[posisi-1];
+			posisi=posisi-1;
+		}
+		barang[posisi]=*sementara;
+	}
+	free(sementara);
+	print_semua (barang,n);		
+}
+
+void urutkan_Nomor_Rak(data *barang, int n) //insertion sort
+{
+	data *sementara = (data *)malloc(sizeof(data));
+    if(sementara == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }	
+	int posisi;
+	for(int i=1;i<n;i++){
+		*sementara=barang[i];
+		posisi=i;
+		while(posisi>0 && barang[posisi-1].no_rak>sementara->no_rak){
+			barang[posisi]=barang[posisi-1];
+			posisi=posisi-1;
+		}
+		barang[posisi]=*sementara;
+	}
+	free(sementara);
+	print_semua (barang,n);		
+}
+
+void urutkan_Jumlah_Barang(data *barang, int n) //insertion sort
+{
+	data *sementara = (data *)malloc(sizeof(data));
+    if(sementara == NULL)
+    {
+        printf("Alokasi Memori Gagal\n");
+        exit(1);
+    }	
+	int posisi;
+	for(int i=1;i<n;i++){
+		*sementara=barang[i];
+		posisi=i;
+		while(posisi>0 && barang[posisi-1].jumlah_barang>sementara->jumlah_barang){
+			barang[posisi]=barang[posisi-1];
+			posisi=posisi-1;
+		}
+		barang[posisi]=*sementara;
+	}
+	free(sementara);
+	print_semua (barang,n);		
+}
+
+int instan(data *barang, data *gudang)
+{
+	int pilihans,j=0,k,l=0,m=0;
+	printf("Masukkan ID Barang :\n");
+	fflush(stdin);
+	scanf("%i",&pilihans);
+	urutkan_ID(barang,ukuran_array);
+	m=cek_ID(barang,pilihans,ukuran_array);
+	urutkan_ID(gudang,gudang_array);	
+	j=cek_ID(gudang,pilihans,gudang_array);
+	printf("%d",j);
+	if(m!=0){
+		system("cls");
+		printf("Barang sudah ditambahkan!");
+		return 0;
+	}
+	else if(j!=0){
+		l=mencari_ID(gudang,pilihans,0,gudang_array-1,gudang_array);
+		system("cls"); 		
+		barang[ukuran_array-1]=gudang[l];
+	}
+	else{
+		system("cls");
+		printf("Tidak ditemukan\n");				
+		return 0;	
+	}
+	printf("Masukkan Jumlah Barang :\n");
+	fflush(stdin);
+	scanf("%d",&k);
+	barang[ukuran_array-1].jumlah_barang=k;
+	printf("Berhasil Ditambahkan!");		
+	return 1; 		
+}
+
+int cek_ID(data *barang, int cari, int ukuranarray)
+{
+	int ID=mencari_ID(barang,cari,0,ukuranarray-1, ukuranarray);
+	if(ID==-1)
+		return 0;
+	else
+		return 1;
+}
+
+void Bayar(data *barang)
+{
+	printf("//==========================================================================================================\\\n");
+	printf("Terimakasih Telah Berbelanja\n");
+	printf("ID Barang	");
+	printf("Nama Barang		");	
+	printf("Harga		");
+	printf("Jumlah Barang		");
+	for(int j=0;j<ukuran_array;j++){
+		printf("\n%d		", barang[j].ID_barang);
+		printf("%s		", barang[j].nama_barang);	
+		printf("%d		", barang[j].harga);
+		printf("%d %s		", barang[j].jumlah_barang, barang[j].satuan);		
+	}
+	printf("\n//==========================================================================================================\\\n");
+	int jumlah=0,bayar=0;
+	for(int j=0;j<ukuran_array;j++){
+		jumlah=jumlah+barang[j].harga*barang[j].jumlah_barang;
+	}
+	printf("\nTotal tagihan: Rp%d.00\n",jumlah);
+	printf("Masukkan Jumlah Pembayaran Uang Tunai :\n");
+	fflush(stdin);
+	scanf("%d",&bayar);
+	printf("Kembali :Rp%d.00\n",bayar-jumlah);
+	printf("\n//==========================================================================================================\\\n");
+	int j=ukuran_array;
+	for(int i=0;i<j-1;i++)
+		ukuran_array=kurangi_array(&barang,ukuran_array);
+	barang[0].ID_barang=0;
+	barang[1].ID_barang=0;		
+}
+
+void print_belanja(data *barang, int size){
+	printf("//==========================================================================================================\\\n");
+//	printf("Terimakasih Telah Berbelanja\n");
+	printf("ID Barang\t");
+	printf("Nama Barang\t\t\t");	
+	printf("Harga\t\t");
+	printf("Jumlah Barang");
+	for(int j=0;j<size;j++){
+		printf("\n%d\t\t", barang[j].ID_barang);
+		printf("%s\t\t\t", barang[j].nama_barang);	
+		printf("%d\t\t", barang[j].harga);
+		printf("%d %s", barang[j].jumlah_barang, barang[j].satuan);		
+	}
+	printf("\n//==========================================================================================================\\\n");
+}
